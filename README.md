@@ -76,7 +76,7 @@ Voici une version corrigée et améliorée de votre texte avec plus de clarté e
 
 ---
 
-### Exemple de modèle dans ce DSL
+### Exemple de code dans ce DSL
 
 ```
 const {
