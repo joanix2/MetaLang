@@ -79,25 +79,60 @@ Voici une version corrigée et améliorée de votre texte avec plus de clarté e
 ### Exemple de modèle dans ce DSL
 
 ```
-model Role [admin, visible] {
-    id: uuid [primary, read-only];
-    name: string [read-only];  // Les rôles ne peuvent pas être modifiés une fois créés
+const {
+    ADMIN = "Admin",    // Rôle prédéfini pour l'administrateur
+    LEADER = "Leader",  // Rôle prédéfini pour le leader
+    USER = "User",      // Rôle prédéfini pour l'utilisateur standard
+    MISSION_STATUS_FACTURE = "facturé"  // Signal pour le statut de mission "facturé"
 }
 
-model User [private, visible] {
-    id: uuid [primary, read-only];
-    name: string;
-    email: string [email, read-only];  // L'email est en lecture seule après sa création
-    password: string [password];
-    role: Role [relation];  // Chaque utilisateur a un rôle
+permissions {
+    ADMIN: 0x744,  // Admins ont tous les droits
+    USER_READ_WRITE: 0x7E2,  // Utilisateurs peuvent lire, écrire, mettre à jour
+    PUBLIC_READ: 0x544  // Public peut seulement lire
 }
 
-model Mission [admin, visible] {
-    id: uuid [primary, read-only];
-    title: string;
-    description: string;
-    leader: User [relation, filter: role.name = "Leader", read-only];  // Le leader doit avoir le rôle "Leader"
-    status: string [read-only];  // Le statut est en lecture seule et ne peut pas être modifié
+model {
+    0x744 Role [role] {  // Admins peuvent tout faire, utilisateurs authentifiés et public peuvent seulement lire
+        id: uuid [primary, auto];  // L'ID est privé, accès en lecture seule
+        name: string;  // Le nom du rôle est en lecture seule pour tout le monde, il ne peut pas être modifié
+    }
+
+    0x7E2 User [user] {  // Admins peuvent créer, lire et mettre à jour ; utilisateurs authentifiés peuvent lire, mettre à jour et supprimer ; public peut seulement lire
+        id: uuid [primary, auto];  // ID en lecture seule, ne peut pas être modifié par personne sauf l'admin
+        name: string;  // Visible et modifiable par l'utilisateur (pas de restriction explicite ici)
+        email: string [email, unique, required];  // Email est en lecture seule pour tout le monde, seul admin peut lire
+        password: string [password];  // Admin peut tout faire ; utilisateurs authentifiés peuvent créer et mettre à jour
+        role: Role [relation, filter: role.name == ADMIN];  // Chaque utilisateur a un rôle, filtré sur les rôles prédéfinis
+    }
+
+    ADMIN Mission {  // Admins peuvent tout faire, utilisateurs authentifiés peuvent lire et modifier ; public peut seulement lire
+        id: uuid [primary, auto];  // L'ID est privé, lecture seule pour tous
+        title: string;  // Titre modifiable par les utilisateurs authentifiés
+        description: string;  // Description modifiable par les utilisateurs authentifiés
+        leader: User [many_to_one, filter: role.name == LEADER];  // Le leader doit avoir le rôle prédéfini "Leader"
+        participants: User [many_to_many];  // Les participants sont multiples
+        invoice: Facture [one_to_one];  // Relation un-à-un avec une facture
+        status: string [visible: type == MISSION_STATUS_FACTURE];  // Le statut est en lecture seule pour tout le monde, seul l'admin peut lire
+    }
+
+    0x744 Facture {  // Modèle Facture
+        invoiceNumber: string [visible: type == MISSION_STATUS_FACTURE];  // Le numéro de facture est visible uniquement si la mission est du type "facturé"
+    }
+}
+
+init {
+    // Initialisation du rôle administrateur avec le nom prédéfini "Admin"
+    admin_role = Role(name: ADMIN)
+
+    // Initialisation du rôle leader avec le nom prédéfini "Leader"
+    leader_role = Role(name: LEADER)
+
+    // Initialisation du rôle utilisateur standard avec le nom prédéfini "User"
+    user_role = Role(name: USER)
+
+    // Création d'un utilisateur de développement avec un email spécifique, un mot de passe et un rôle utilisateur standard
+    dev_user = User(email: "dev.beecoming@example.com", password: "metalang", role: user_role)
 }
 
 ```
