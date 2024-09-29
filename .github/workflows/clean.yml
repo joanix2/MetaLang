@@ -1,0 +1,25 @@
+# .github/workflows/clean.yml
+name: Run make clean on push
+
+# Déclencheur du pipeline : à chaque push sur n'importe quelle branche
+on:
+  push:
+    branches:
+      - "*" # Ceci déclenche le workflow sur toutes les branches
+      # ou remplace par une branche spécifique, ex: 'main'
+
+# Définition des jobs à exécuter
+jobs:
+  clean:
+    # L'environnement dans lequel exécuter le job, ici Ubuntu
+    runs-on: ubuntu-latest
+
+    # Étapes du job
+    steps:
+      # 1. Vérifier le code source en le clonant depuis GitHub
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # 2. Exécuter la commande `make clean`
+      - name: Run make clean
+        run: make clean

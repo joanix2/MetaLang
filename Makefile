@@ -2,7 +2,8 @@
 
 # Fichiers sources
 LEXER=lexer
-TOKENS=tokens
+PARSER=parser
+AST=ast
 MAIN=main
 
 # Programme final
@@ -18,21 +19,28 @@ all: $(EXEC)
 $(LEXER).ml: $(LEXER).mll
 	ocamllex $(LEXER).mll
 
-# Compiler les fichiers .mli et .ml
-$(TOKENS).cmo: $(TOKENS).ml $(TOKENS).mli
-	$(OCAMLC) -c $(TOKENS).mli
-	$(OCAMLC) -c $(TOKENS).ml
+# Générer parser.ml et parser.mli à partir de parser.mly
+$(PARSER).ml $(PARSER).mli: $(PARSER).mly
+	menhir --ocamlc $(OCAMLC) --infer $(PARSER).mly
 
-$(LEXER).cmo: $(LEXER).ml $(TOKENS).cmo
+# Compiler les fichiers .mli et .ml
+$(AST).cmo: $(AST).ml
+	$(OCAMLC) -c $(AST).ml
+
+$(PARSER).cmo: $(PARSER).ml $(PARSER).mli $(AST).cmo
+	$(OCAMLC) -c $(PARSER).mli
+	$(OCAMLC) -c $(PARSER).ml
+
+$(LEXER).cmo: $(LEXER).ml $(PARSER).cmo
 	$(OCAMLC) -c $(LEXER).ml
 
-$(MAIN).cmo: $(MAIN).ml $(TOKENS).cmo $(LEXER).cmo
+$(MAIN).cmo: $(MAIN).ml $(LEXER).cmo $(PARSER).cmo $(AST).cmo
 	$(OCAMLC) -c $(MAIN).ml
 
 # Lier et créer l'exécutable
-$(EXEC): $(TOKENS).cmo $(LEXER).cmo $(MAIN).cmo
-	$(OCAMLC) -o $(EXEC) $(TOKENS).cmo $(LEXER).cmo $(MAIN).cmo
+$(EXEC): $(AST).cmo $(PARSER).cmo $(LEXER).cmo $(MAIN).cmo
+	$(OCAMLC) -o $(EXEC) $(AST).cmo $(PARSER).cmo $(LEXER).cmo $(MAIN).cmo
 
 # Nettoyer les fichiers générés
 clean:
-	rm -f *.cmo *.cmi $(LEXER).ml $(EXEC)
+	rm -f *.cmo *.cmi $(LEXER).ml $(PARSER).ml $(PARSER).mli $(EXEC)

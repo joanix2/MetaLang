@@ -20,10 +20,12 @@ type init_decl = {
   value: string;
 }
 
+(* Déclaration principale pour contenir chaque type de déclaration *)
 type decl =
   | Const of const_decl list
   | Permissions of permissions_decl list
   | Model of model_decl list
   | Init of init_decl list
 
+(* Type pour l'ensemble du programme *)
 type program = decl list

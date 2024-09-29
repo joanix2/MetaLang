@@ -29,17 +29,17 @@ decl:
   | INIT LBRACE init_decls RBRACE { Init ($3) }
 
 const_decls:
-  | IDENT EQUAL STRING SEMICOLON { ConstDecl ($1, $3) }
-  | const_decls IDENT EQUAL STRING SEMICOLON { ConstDecl ($2, $4) :: $1 }
+  | IDENT EQUAL STRING SEMICOLON { [{ name = $1; value = $3 }] }
+  | const_decls IDENT EQUAL STRING SEMICOLON { { name = $2; value = $4 } :: $1 }
 
 permissions_decls:
-  | IDENT COLON HEX_NUMBER SEMICOLON { PermissionsDecl ($1, $3) }
-  | permissions_decls IDENT COLON HEX_NUMBER SEMICOLON { PermissionsDecl ($2, $4) :: $1 }
+  | IDENT COLON HEX_NUMBER SEMICOLON { [{ name = $1; code = $3 }] }
+  | permissions_decls IDENT COLON HEX_NUMBER SEMICOLON { { name = $2; code = $4 } :: $1 }
 
 model_decls:
-  | IDENT COLON STRING SEMICOLON { ModelDecl ($1, $3) }
-  | model_decls IDENT COLON STRING SEMICOLON { ModelDecl ($2, $4) :: $1 }
+  | IDENT COLON STRING SEMICOLON { [{ name = $1; typ = $3 }] }
+  | model_decls IDENT COLON STRING SEMICOLON { { name = $2; typ = $4 } :: $1 }
 
 init_decls:
-  | IDENT EQUAL IDENT SEMICOLON { InitDecl ($1, $3) }
-  | init_decls IDENT EQUAL IDENT SEMICOLON { InitDecl ($2, $4) :: $1 }
+  | IDENT EQUAL IDENT SEMICOLON { [{ name = $1; value = $3 }] }
+  | init_decls IDENT EQUAL IDENT SEMICOLON { { name = $2; value = $4 } :: $1 }

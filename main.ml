@@ -12,6 +12,7 @@ let read_file filename =
   close_in chan;
   content
 
+(* Fonction pour afficher les tokens un par un *)
 let rec print_tokens lexbuf =
   match lexer lexbuf with
   | EOF -> print_endline "End of File"
@@ -41,6 +42,17 @@ let rec print_tokens lexbuf =
       );
       print_tokens lexbuf
 
+(* Fonction pour lire le fichier source et gérer les erreurs de parsing *)
+let parse_with_error lexbuf =
+  try Parser.program Lexer.lexer lexbuf
+  with
+  | Parser.Error ->
+    let pos = lexbuf.lex_curr_p in
+    Printf.eprintf "Syntax error at line %d, character %d\n"
+      pos.pos_lnum (pos.pos_cnum - pos.pos_bol + 1);
+    exit (-1)
+
+(* Fonction principale *)
 let () =
   if Array.length Sys.argv < 2 then
     Printf.printf "Usage: %s <filename>\n" Sys.argv.(0)
@@ -48,4 +60,10 @@ let () =
     let filename = Sys.argv.(1) in
     let input = read_file filename in
     let lexbuf = from_string input in
-    print_tokens lexbuf
+    
+    (* Si vous voulez afficher les tokens *)
+    (* print_tokens lexbuf; *)
+
+    (* Si vous voulez parser et afficher le succès *)
+    let ast = parse_with_error lexbuf in
+    Printf.printf "Parsed successfully.\n"
