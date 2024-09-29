@@ -1,8 +1,8 @@
 (* ast.ml *)
 
 type const_decl = {
-  name: string;
-  value: string;
+  const_name: string;
+  const_value: string;
 }
 
 type permissions_decl = {
@@ -16,8 +16,8 @@ type model_decl = {
 }
 
 type init_decl = {
-  name: string;
-  value: string;
+  init_name: string;
+  init_value: string;
 }
 
 (* Déclaration principale pour contenir chaque type de déclaration *)

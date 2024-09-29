@@ -1,11 +1,16 @@
 (* tokens.ml *)
 
 type token =
+  (* Mots-clés *)
   | CONST
   | PERMISSIONS
   | MODEL
   | INIT
+
+  (* Identificateurs *)
   | IDENT of string
+
+  (* Symboles *)
   | LBRACE        (* { *)
   | RBRACE        (* } *)
   | LBRACKET      (* [ *)
@@ -17,7 +22,11 @@ type token =
   | SEMICOLON     (* ; *)
   | EQUAL         (* = *)
   | EQEQ          (* == *)
+
+  (* Littéraux *)
   | STRING of string
   | HEX_NUMBER of string
   | NUMBER of int
+
+  (* Fin de fichier *)
   | EOF
