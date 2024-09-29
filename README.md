@@ -43,15 +43,7 @@ Le compilateur génère automatiquement les fichiers nécessaires en fonction de
 
 ### Compilation et Exécution
 
-Pour compiler et exécuter ces fichiers, suivez ces étapes :
-
-1. **Générer le fichier `lexer.ml`** :
-
-```bash
-ocamllex lexer.mll
-```
-
-2. **Compiler les fichiers** :
+1. **Compiler les fichiers** :
 
 Pour compiler tout, exécutez simplement :
 
@@ -59,20 +51,20 @@ Pour compiler tout, exécutez simplement :
 make
 ```
 
-Pour nettoyer les fichiers intermédiaires (comme `.cmo`, `.cmi`), exécutez :
-
-```bash
-make clean
-```
-
-3. **Lier les fichiers et exécuter** :
+2. **Lier les fichiers et exécuter** :
 
 ```bash
 ocamlc -o lexer_program tokens.cmo lexer.cmo main.cmo
 ./lexer_program
 ```
 
-Voici une version corrigée et améliorée de votre texte avec plus de clarté et de précision :
+3. **Supprimer les fichiers compilés** :
+
+Pour nettoyer les fichiers intermédiaires (comme `.cmo`, `.cmi`), exécutez :
+
+```bash
+make clean
+```
 
 ---
 
