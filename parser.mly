@@ -39,7 +39,7 @@ permissions_decls:
   | permissions_decls IDENT COLON HEX_NUMBER SEMICOLON { $1 @ [{ name = $2; code = $4 }] }
 
 model_decls:
-  | IDENT COLON STRING SEMICOLON { [{ name = $1; typ = $3 }] }
+  | HEX_NUMBER IDENT COLON STRING SEMICOLON { [{ name = $1; typ = $3 }] }
   | model_decls IDENT COLON STRING SEMICOLON { $1 @ [{ name = $2; typ = $4 }] }
 
 init_decls:

@@ -1,14 +1,14 @@
 const {
-    ADMIN = "Admin",    // Rôle prédéfini pour l'administrateur
-    LEADER = "Leader",  // Rôle prédéfini pour le leader
-    USER = "User",      // Rôle prédéfini pour l'utilisateur standard
-    MISSION_STATUS_FACTURE = "facturé"  // Signal pour le statut de mission "facturé"
+    ADMIN = "Admin";    // Rôle prédéfini pour l'administrateur
+    LEADER = "Leader";  // Rôle prédéfini pour le leader
+    USER = "User";      // Rôle prédéfini pour l'utilisateur standard
+    MISSION_STATUS_FACTURE = "facturé";  // Signal pour le statut de mission "facturé"
 }
 
 permissions {
-    ADMIN: 0x744,  // Admins ont tous les droits
-    USER_READ_WRITE: 0x7E2,  // Utilisateurs peuvent lire, écrire, mettre à jour
-    PUBLIC_READ: 0x544  // Public peut seulement lire
+    ADMIN: 0x744;  // Admins ont tous les droits
+    USER_READ_WRITE: 0x7E2;  // Utilisateurs peuvent lire, écrire, mettre à jour
+    PUBLIC_READ: 0x544;  // Public peut seulement lire
 }
 
 model {

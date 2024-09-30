@@ -1,6 +1,6 @@
 {
 (* lexer.ml avec gestion des erreurs incluant la ligne et la colonne *)
-open Tokens
+open Parser
 open Lexing
 exception Error of string
 

@@ -1,0 +1,28 @@
+# Fichiers générés par la compilation OCaml
+*.cmo
+*.cmi
+*.cmx
+*.o
+*.cma
+*.cmxa
+*.cmxs
+*.a
+
+# Fichiers générés par ocamllex
+lexer.ml
+
+# Fichiers générés par menhir
+parser.ml
+parser.mli
+
+# Fichiers exécutables
+lexer_program
+
+# Dossiers de build (parfois utilisés dans certains outils OCaml)
+_build/
+_build*/
+
+# Fichiers spécifiques à l'environnement
+*.merlin
+*.opam
+*.install
